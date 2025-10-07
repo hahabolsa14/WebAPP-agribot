@@ -8,6 +8,7 @@ type AuthInputProps = {
   placeholder?: string;
   secureTextEntry?: boolean;
   keyboardType?: "default" | "email-address";
+  inputMode?: string;
 };
 
 export default function AuthInput({
@@ -17,6 +18,7 @@ export default function AuthInput({
   placeholder,
   secureTextEntry,
   keyboardType = "default",
+  inputMode,
 }: AuthInputProps) {
   return (
     <View style={{ marginBottom: 15 }}>

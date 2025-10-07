@@ -10,9 +10,9 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import TabsHeader from "../../components/TabsHeader";
 import { submitMessage } from "../../utils/firestoreHelpers";
 import BackgroundWrapper from "../BackgroundWrapper";
+import TabsHeader from "../../components/TabsHeader";
 
 export default function AboutScreen() {
   const [form, setForm] = useState({
@@ -63,17 +63,16 @@ export default function AboutScreen() {
 
   return (
     <BackgroundWrapper>
-      <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
         <TabsHeader currentPage="About" />
-
         <ScrollView
           style={styles.scrollContainer}
           contentContainerStyle={{ flexGrow: 1, justifyContent: "space-between" }}
+          showsVerticalScrollIndicator={false}
         >
-          <Image
-            source={{ uri: "https://i.ibb.co/0Vh6nQv/field-banner.jpg" }}
-            style={styles.bannerImage}
-          />
+          <View style={styles.bannerContainer}>
+            <Text style={styles.bannerText}>EcoVentureBot</Text>
+          </View>
 
           <View style={styles.content}>
             <Text style={styles.title}>About Us</Text>
@@ -117,14 +116,31 @@ export default function AboutScreen() {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     </BackgroundWrapper>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    margin: 0,
+    padding: 0,
+  },
   scrollContainer: { flex: 1 },
-  bannerImage: { width: "100%", height: 160, resizeMode: "cover" },
+  bannerContainer: { 
+    width: "100%", 
+    height: 160, 
+    backgroundColor: "rgba(46, 125, 50, 0.9)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bannerText: {
+    fontSize: 32,
+    fontWeight: "bold",
+    color: "#fff",
+    textAlign: "center",
+  },
   content: { paddingHorizontal: 20, marginTop: 10 },
   title: { fontSize: 28, fontWeight: "bold", color: "#122909", marginBottom: 15 },
   paragraph: { fontSize: 16, color: "#333", lineHeight: 22, marginBottom: 12 },
