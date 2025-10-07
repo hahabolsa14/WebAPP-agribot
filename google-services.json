@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "442931597967",
+    "project_id": "ecoventure-f7c63",
+    "storage_bucket": "ecoventure-f7c63.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442931597967:android:1ffa7e73f03148f5f5d6fa",
+        "android_client_info": {
+          "package_name": "com.ecoventure.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4jZAmn9pAU9elct-uEavMmHdKqUm7plI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
