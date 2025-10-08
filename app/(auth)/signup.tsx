@@ -101,7 +101,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#111",
     padding: 20,
     borderRadius: 10,
-    minHeight: 650,
+    minHeight: 450,
+    maxWidth: 400,
+    width: '100%',
+    alignSelf: 'center'
   },
   button: {
     backgroundColor: "#fff",
