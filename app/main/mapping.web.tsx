@@ -2,10 +2,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Platform, StyleSheet, View, Text, TextInput, TouchableOpacity, ViewStyle, TextStyle } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import AvatarMenu from "../../components/AvatarMenu";
-import TabsHeader from "../../components/TabsHeader";
-import BackgroundWrapper from "../BackgroundWrapper";
 import { useAuth } from "../../utils/authHelpers";
 import { saveMapMarkers, getMapMarkers } from "../../utils/mapHelpers.web";
 
@@ -25,13 +21,9 @@ export default function MappingPage() {
   // Early return if window is not available (SSR protection)
   if (typeof window === 'undefined') {
     return (
-      <BackgroundWrapper>
-        <SafeAreaView style={{ flex: 1 }}>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Loading map...</Text>
-          </View>
-        </SafeAreaView>
-      </BackgroundWrapper>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading map...</Text>
+      </View>
     );
   }
 
@@ -123,6 +115,11 @@ export default function MappingPage() {
   };
 
   const saveMarkersToFirebase = async () => {
+    if (markers.length === 0) {
+      if (typeof window !== 'undefined') window.alert('No markers to save');
+      return;
+    }
+
     if (!user?.uid) {
       if (typeof window !== 'undefined') window.alert('You must be logged in to save markers');
       return;
@@ -130,7 +127,7 @@ export default function MappingPage() {
     
     const success = await saveMapMarkers(user.uid, markers);
     if (success) {
-      if (typeof window !== 'undefined') window.alert('Markers saved successfully');
+      if (typeof window !== 'undefined') window.alert(`Successfully saved ${markers.length} marker(s)`);
     } else {
       if (typeof window !== 'undefined') window.alert('Failed to save markers');
     }
@@ -246,30 +243,28 @@ export default function MappingPage() {
   }, [user]);
 
   return (
-    <BackgroundWrapper>
-      <SafeAreaView style={{ flex: 1 }}>
-        <TabsHeader currentPage="Mapping" />
-        <View style={styles.content}>
-          <Text style={styles.title}>Field Mapping</Text>
-          <View style={styles.inputContainer}>
+    <View style={styles.content}>
+      <View style={styles.inputContainer}>
             <View style={styles.coordinateInputs}>
               <View style={styles.inputWrapper}>
-                <Text>Latitude:</Text>
+                <Text style={styles.label}>Latitude:</Text>
                 <TextInput
                   style={styles.input}
                   value={inputLat}
                   onChangeText={setInputLat}
                   placeholder="Enter latitude"
+                  placeholderTextColor="#808080"
                   inputMode="numeric"
                 />
               </View>
               <View style={styles.inputWrapper}>
-                <Text>Longitude:</Text>
+                <Text style={styles.label}>Longitude:</Text>
                 <TextInput
                   style={styles.input}
                   value={inputLng}
                   onChangeText={setInputLng}
                   placeholder="Enter longitude"
+                  placeholderTextColor="#808080"
                   inputMode="numeric"
                 />
               </View>
@@ -286,91 +281,93 @@ export default function MappingPage() {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={styles.mapContainer}>
-            <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
-          </View>
-        </View>
-      </SafeAreaView>
-    </BackgroundWrapper>
+      <View style={styles.mapContainer}>
+        <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  content: {
+    flex: 1,
+    padding: 20,
+    paddingTop: 10,
+  } as ViewStyle,
   inputContainer: {
-    padding: 15,
-    backgroundColor: 'white',
+    padding: 12,
+    backgroundColor: '#1E1E1E',
     borderRadius: 12,
     marginBottom: 15,
     width: '100%',
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.5,
     shadowRadius: 3,
     borderWidth: 1,
-    borderColor: 'rgba(46, 125, 50, 0.1)',
+    borderColor: '#333333',
   } as ViewStyle,
   removeButton: {
     backgroundColor: '#f44336',
-    padding: 10,
-    borderRadius: 4,
+    padding: 8,
+    borderRadius: 8,
     flex: 1,
     alignItems: 'center',
   } as ViewStyle,
   coordinateInputs: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: 8,
   } as ViewStyle,
   inputWrapper: {
     flex: 1,
     marginHorizontal: 5,
   } as ViewStyle,
+  label: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    marginBottom: 4,
+  } as TextStyle,
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
+    borderColor: '#404040',
+    borderRadius: 8,
     padding: 8,
     marginTop: 4,
-    color: '#000',
+    color: '#FFFFFF',
+    fontSize: 14,
+    height: 38,
+    backgroundColor: '#2C2C2C',
   } as TextStyle,
   addButton: {
-    backgroundColor: '#007AFF',
-    padding: 10,
-    borderRadius: 4,
+    backgroundColor: '#2196F3',
+    padding: 8,
+    borderRadius: 8,
     flex: 1,
     alignItems: 'center',
   } as ViewStyle,
   saveButton: {
-    backgroundColor: '#4CAF50',
-    padding: 10,
-    borderRadius: 4,
+    backgroundColor: '#2e7d32',
+    padding: 8,
+    borderRadius: 8,
     flex: 1,
     alignItems: 'center',
   } as ViewStyle,
   buttonText: {
     color: 'white',
-    fontWeight: 'bold',
-  } as TextStyle,
-  content: {
-    flex: 1,
-    padding: 20,
-    paddingTop: 10,
-  } as ViewStyle,
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-    color: "#000000ff",
+    fontWeight: '600',
+    fontSize: 14,
   } as TextStyle,
   mapContainer: {
     width: '100%',
     height: Platform.OS === 'web' ? (typeof window !== 'undefined' ? window.innerHeight - 320 : 400) : 400,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#2C2C2C',
     borderRadius: 8,
     overflow: 'hidden',
     marginTop: 10,
+    borderWidth: 1,
+    borderColor: '#404040',
   } as ViewStyle,
   buttonRow: {
     flexDirection: 'row',

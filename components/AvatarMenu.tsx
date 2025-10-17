@@ -5,7 +5,7 @@ import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-na
 import { auth } from "../firebase";
 
 interface AvatarMenuProps {
-  currentPage?: "Home" | "About" | string;
+  currentPage?: "Home" | "About" | "Mapping" | "AI Detection" | string;
 }
 
 export default function AvatarMenu({ currentPage = "" }: AvatarMenuProps) {
@@ -43,6 +43,16 @@ export default function AvatarMenu({ currentPage = "" }: AvatarMenuProps) {
           onPress={() => setMenuVisible(false)}
         >
           <View style={styles.menu}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => {
+                setMenuVisible(false);
+                router.push("/main/aiDetection" as any);
+              }}
+            >
+              <Text style={styles.menuText}>AI Detection</Text>
+            </TouchableOpacity>
+
             <TouchableOpacity
               style={styles.menuItem}
               onPress={() => {

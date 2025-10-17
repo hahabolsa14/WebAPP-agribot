@@ -10,11 +10,13 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { submitMessage } from "../../utils/firestoreHelpers";
 import BackgroundWrapper from "../BackgroundWrapper";
-import TabsHeader from "../../components/TabsHeader";
 
 export default function AboutScreen() {
+  const router = useRouter();
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -22,6 +24,7 @@ export default function AboutScreen() {
     message: "",
   });
   const [loading, setLoading] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const handleChange = (key: keyof typeof form, value: string) => {
     setForm({ ...form, [key]: value });
@@ -63,26 +66,92 @@ export default function AboutScreen() {
 
   return (
     <BackgroundWrapper>
-      <View style={styles.container}>
-        <TabsHeader currentPage="About" />
+      <SafeAreaView style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.headerLeft}>
+            <Ionicons name="leaf-outline" size={32} color="#2e7d32" />
+            <Text style={styles.headerTitle}>AgriSafeNav</Text>
+            
+            {/* Navigation Links */}
+            <View style={styles.headerNav}>
+              <TouchableOpacity onPress={() => router.push('/home')} style={styles.navLink}>
+                <Text style={styles.navLinkText}>Home</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.navLink}>
+                <Text style={[styles.navLinkText, styles.navLinkActive]}>About</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.headerRight}>
+            <TouchableOpacity style={styles.headerIcon}>
+              <Ionicons name="notifications-outline" size={24} color="#B0B0B0" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.headerIcon} onPress={() => router.push('/settings')}>
+              <Ionicons name="settings-outline" size={24} color="#B0B0B0" />
+            </TouchableOpacity>
+            <View style={styles.profileContainer}>
+              <TouchableOpacity 
+                style={styles.avatar}
+                onPress={() => setShowProfileMenu(!showProfileMenu)}
+              >
+                <Ionicons name="person-outline" size={24} color="#4CAF50" />
+              </TouchableOpacity>
+              
+              {/* Profile Dropdown Menu */}
+              {showProfileMenu && (
+                <View style={styles.profileMenu}>
+                  <TouchableOpacity 
+                    style={styles.menuItem}
+                    onPress={() => {
+                      setShowProfileMenu(false);
+                      router.push('/profile');
+                    }}
+                  >
+                    <Ionicons name="person-outline" size={20} color="#B0B0B0" />
+                    <Text style={styles.menuItemText}>Profile</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    style={styles.menuItem}
+                    onPress={() => {
+                      setShowProfileMenu(false);
+                      router.push('/settings');
+                    }}
+                  >
+                    <Ionicons name="settings-outline" size={20} color="#B0B0B0" />
+                    <Text style={styles.menuItemText}>Settings</Text>
+                  </TouchableOpacity>
+                  <View style={styles.menuDivider} />
+                  <TouchableOpacity 
+                    style={styles.menuItem}
+                    onPress={() => {
+                      setShowProfileMenu(false);
+                      router.push('/(auth)/signin');
+                    }}
+                  >
+                    <Ionicons name="log-out-outline" size={20} color="#f44336" />
+                    <Text style={[styles.menuItemText, { color: "#f44336" }]}>Logout</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+          </View>
+        </View>
+
         <ScrollView
           style={styles.scrollContainer}
           contentContainerStyle={{ flexGrow: 1, justifyContent: "space-between" }}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.bannerContainer}>
-            <Text style={styles.bannerText}>EcoVentureBot</Text>
-          </View>
-
           <View style={styles.content}>
             <View style={styles.textContainer}>
               <Text style={styles.title}>About Us</Text>
               <Text style={styles.paragraph}>
-                At EcoVentureBot, we are committed to revolutionizing the agricultural landscape
+                At AgriSafeNav, we are committed to revolutionizing the agricultural landscape
                 with cutting-edge autonomous technology.
               </Text>
               <Text style={styles.paragraph}>
-                EcoVentureBot designs and develops autonomous ground vehicles tailored for
+                AgriSafeNav designs and develops autonomous ground vehicles tailored for
                 agricultural applications. Using smart navigation, AI-driven analytics, and
                 real-time data, our vehicles automate key farming tasks like precision planting,
                 irrigation, crop monitoring, and soil analysis. The result? A more efficient,
@@ -100,6 +169,7 @@ export default function AboutScreen() {
                 <TextInput
                   style={[styles.inputBox, field.height ? { height: field.height, textAlignVertical: "top" } : {}]}
                   placeholder={`Enter ${field.label.toLowerCase()}`}
+                  placeholderTextColor="#808080"
                   keyboardType={field.keyboardType}
                   multiline={field.multiline}
                   value={form[field.key]}
@@ -118,7 +188,7 @@ export default function AboutScreen() {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </View>
+      </SafeAreaView>
     </BackgroundWrapper>
   );
 }
@@ -126,63 +196,201 @@ export default function AboutScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 0,
-    padding: 0,
+    backgroundColor: "#121212",
   },
-  scrollContainer: { flex: 1 },
-  bannerContainer: { 
-    width: "100%", 
-    height: 160, 
-    backgroundColor: "rgba(46, 125, 50, 0.9)",
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#1A1A1A",
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#333333",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
+    zIndex: 10000,
+    position: "relative",
+  },
+  headerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  headerNav: {
+    flexDirection: "row",
+    gap: 24,
+    marginLeft: 32,
+  },
+  navLink: {
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+  },
+  navLinkText: {
+    fontSize: 16,
+    color: "#B0B0B0",
+    fontWeight: "500",
+  },
+  navLinkActive: {
+    color: "#4CAF50",
+    fontWeight: "600",
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#4CAF50",
+  },
+  headerRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+    position: "relative",
+  },
+  headerIcon: {
+    padding: 8,
+  },
+  profileContainer: {
+    position: "relative",
+    marginLeft: 8,
+    zIndex: 100000,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#2C2C2C",
     justifyContent: "center",
     alignItems: "center",
   },
-  bannerText: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: "#fff",
-    textAlign: "center",
+  profileMenu: {
+    position: "absolute",
+    top: 50,
+    right: 0,
+    backgroundColor: "#252525",
+    borderRadius: 8,
+    padding: 8,
+    minWidth: 180,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
+    elevation: 10000,
+    zIndex: 99999,
+    borderWidth: 1,
+    borderColor: "#404040",
   },
-  content: { paddingHorizontal: 20, marginTop: 10 },
+  menuItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 4,
+  },
+  menuItemText: {
+    fontSize: 15,
+    color: "#FFFFFF",
+    fontWeight: "500",
+  },
+  menuDivider: {
+    height: 1,
+    backgroundColor: "#404040",
+    marginVertical: 8,
+  },
+  scrollContainer: { 
+    flex: 1,
+  },
+  content: { 
+    paddingHorizontal: 20, 
+    marginTop: 20,
+  },
   textContainer: {
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    backgroundColor: "#1E1E1E",
     borderRadius: 12,
-    padding: 20,
+    padding: 24,
     marginBottom: 20,
     shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 3,
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
+    elevation: 5,
     borderWidth: 1,
-    borderColor: "rgba(46, 125, 50, 0.1)",
+    borderColor: "#333333",
   },
-  title: { fontSize: 28, fontWeight: "bold", color: "#122909", marginBottom: 15 },
-  paragraph: { fontSize: 16, color: "#333", lineHeight: 24, marginBottom: 14 },
+  title: { 
+    fontSize: 28, 
+    fontWeight: "bold", 
+    color: "#FFFFFF", 
+    marginBottom: 16,
+    letterSpacing: 0.5,
+  },
+  paragraph: { 
+    fontSize: 16, 
+    color: "#B0B0B0", 
+    lineHeight: 26, 
+    marginBottom: 14,
+  },
   contactContainer: {
     flexGrow: 1,
     paddingHorizontal: 20,
-    marginTop: 20,
-    backgroundColor: "#fff",
-    paddingVertical: 20,
-    borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 30,
+    backgroundColor: "#1E1E1E",
+    paddingVertical: 24,
+    borderRadius: 12,
     shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 5,
-    elevation: 2,
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: "#333333",
   },
-  contactTitle: { fontSize: 24, fontWeight: "bold", marginBottom: 20 },
-  inputGroup: { marginBottom: 15 },
-  label: { fontSize: 14, fontWeight: "500", marginBottom: 5 },
+  contactTitle: { 
+    fontSize: 24, 
+    fontWeight: "bold", 
+    color: "#FFFFFF",
+    marginBottom: 20,
+    letterSpacing: 0.5,
+  },
+  inputGroup: { 
+    marginBottom: 16,
+  },
+  label: { 
+    fontSize: 14, 
+    fontWeight: "500", 
+    color: "#FFFFFF",
+    marginBottom: 8,
+  },
   inputBox: {
-    backgroundColor: "#f9f9f9",
-    paddingHorizontal: 10,
+    backgroundColor: "#2C2C2C",
+    paddingHorizontal: 14,
     paddingVertical: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#404040",
+    color: "#FFFFFF",
+    fontSize: 15,
   },
-  submitButton: { marginTop: 15, backgroundColor: "#000", paddingVertical: 14, borderRadius: 8, alignItems: "center" },
-  submitText: { color: "#fff", fontWeight: "600", fontSize: 16 },
+  submitButton: { 
+    marginTop: 20, 
+    backgroundColor: "#4CAF50", 
+    paddingVertical: 14, 
+    borderRadius: 8, 
+    alignItems: "center",
+    shadowColor: "#4CAF50",
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  submitText: { 
+    color: "#FFFFFF", 
+    fontWeight: "600", 
+    fontSize: 16,
+    letterSpacing: 0.5,
+  },
 });

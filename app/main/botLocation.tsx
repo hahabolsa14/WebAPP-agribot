@@ -2,9 +2,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Platform, StyleSheet, Text, View, ViewStyle, TextStyle } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import AvatarMenu from "../../components/AvatarMenu";
-import BackgroundWrapper from "../BackgroundWrapper";
 
 declare global {
   interface Window {
@@ -23,22 +20,9 @@ export default function BotLocationPage() {
   // Early return if window is not available (SSR protection)
   if (typeof window === 'undefined') {
     return (
-      <BackgroundWrapper>
-        <SafeAreaView style={{ flex: 1 }}>
-          <View style={styles.topBar}>
-            <View style={styles.leftContainer}>
-              <Ionicons name="location-outline" size={28} color="black" />
-              <Text style={styles.headerTitle}>Bot Location</Text>
-            </View>
-            <View style={styles.rightContainer}>
-              <AvatarMenu currentPage="BotLocation" />
-            </View>
-          </View>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Loading map...</Text>
-          </View>
-        </SafeAreaView>
-      </BackgroundWrapper>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading map...</Text>
+      </View>
     );
   }
 
@@ -98,7 +82,7 @@ export default function BotLocationPage() {
     }).addTo(leafletMap.current)
     .bindPopup(`
       <div style="text-align: center;">
-        <b>🤖 EcoVentureBot</b><br>
+        <b>🤖 AgriVentureBot</b><br>
         <span style="color: ${botLocation.status === 'online' ? '#2e7d32' : '#f44336'}">
           Status: ${botLocation.status.toUpperCase()}
         </span><br>
@@ -174,7 +158,7 @@ export default function BotLocationPage() {
       botMarker.current.setLatLng([botLocation.lat, botLocation.lng]);
       botMarker.current.getPopup().setContent(`
         <div style="text-align: center;">
-          <b>🤖 EcoVentureBot</b><br>
+          <b>🤖 AgriVentureBot</b><br>
           <span style="color: ${botLocation.status === 'online' ? '#2e7d32' : '#f44336'}">
             Status: ${botLocation.status.toUpperCase()}
           </span><br>
@@ -197,23 +181,9 @@ export default function BotLocationPage() {
   };
 
   return (
-    <BackgroundWrapper>
-      <SafeAreaView style={{ flex: 1 }}>
-        {/* Top Navigation Bar */}
-        <View style={styles.topBar}>
-          <View style={styles.leftContainer}>
-            <Ionicons name="location-outline" size={28} color="black" />
-            <Text style={styles.headerTitle}>Bot Location</Text>
-          </View>
-
-          <View style={styles.rightContainer}>
-            <AvatarMenu currentPage="BotLocation" />
-          </View>
-        </View>
-
-        <View style={styles.content}>
-          {/* Status Card */}
-          <View style={styles.statusCard}>
+    <View style={styles.content}>
+      {/* Status Card */}
+      <View style={styles.statusCard}>
             <View style={styles.statusHeader}>
               <View style={styles.statusIndicator}>
                 <View style={[styles.statusDot, { backgroundColor: getStatusColor(botLocation.status) }]} />
@@ -245,50 +215,26 @@ export default function BotLocationPage() {
             <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
           </View>
         </View>
-      </SafeAreaView>
-    </BackgroundWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  topBar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "rgba(255,255,255,0.9)",
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-  },
-  leftContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#122909",
-  },
-  rightContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
   content: {
     flex: 1,
     padding: 20,
     gap: 15,
   },
   statusCard: {
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    backgroundColor: "#1E1E1E",
     borderRadius: 12,
     padding: 20,
     shadowColor: "#000",
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.5,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
     elevation: 3,
     borderWidth: 1,
-    borderColor: "rgba(46, 125, 50, 0.1)",
+    borderColor: "#333333",
   } as ViewStyle,
   statusHeader: {
     flexDirection: "row",
@@ -309,14 +255,14 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 16,
     fontWeight: "500",
-    color: "#333",
+    color: "#FFFFFF",
   } as TextStyle,
   statusValue: {
     fontWeight: "600",
   } as TextStyle,
   lastUpdate: {
     fontSize: 12,
-    color: "#666",
+    color: "#B0B0B0",
   } as TextStyle,
   coordinatesContainer: {
     gap: 10,
@@ -328,22 +274,22 @@ const styles = StyleSheet.create({
   } as ViewStyle,
   coordinateLabel: {
     fontSize: 14,
-    color: "#666",
+    color: "#B0B0B0",
     minWidth: 70,
   } as TextStyle,
   coordinateValue: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#2e7d32",
+    color: "#4CAF50",
   } as TextStyle,
   mapContainer: {
     flex: 1,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#2C2C2C",
     borderRadius: 12,
     overflow: "hidden",
     minHeight: 400,
     shadowColor: "#000",
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.5,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
     elevation: 3,

@@ -18,9 +18,10 @@ export default function BackgroundWrapper({ children }: { children: React.ReactN
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+    backgroundColor: "#121212", // Dark background color
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255,255,255,0.65)", // modify opacity here
+    backgroundColor: "rgba(0, 0, 0, 0.85)", // Dark semi-transparent overlay
   },
 });

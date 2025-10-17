@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AvatarMenu from "./AvatarMenu";
 
 interface TabsHeaderProps {
-  currentPage?: "Home" | "About" | "Mapping";
+  currentPage?: "Home" | "About" | "Mapping" | "AI Detection";
   route?: any;
   options?: any;
 }
@@ -14,11 +14,12 @@ export default function TabsHeader({ currentPage, route, options }: TabsHeaderPr
   const router = useRouter();
   
   // Determine current page from route if not provided
-  const getCurrentPage = (): "Home" | "About" | "Mapping" => {
+  const getCurrentPage = (): "Home" | "About" | "Mapping" | "AI Detection" => {
     if (currentPage) return currentPage;
     if (route?.name === "home") return "Home";
     if (route?.name === "about") return "About";
     if (route?.name === "mapping") return "Mapping";
+    if (route?.name === "aiDetection") return "AI Detection";
     return "Home";
   };
 
@@ -51,6 +52,14 @@ export default function TabsHeader({ currentPage, route, options }: TabsHeaderPr
           >
             <Ionicons name="map-outline" size={16} color={current === "Mapping" ? "#2e7d32" : "#fff"} />
             <Text style={current === "Mapping" ? styles.tabTextActive : styles.tabText}>Mapping</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={current === "AI Detection" ? styles.tabActive : styles.tab}
+            onPress={() => router.push("/main/aiDetection" as any)}
+          >
+            <Ionicons name="hardware-chip-outline" size={16} color={current === "AI Detection" ? "#2e7d32" : "#fff"} />
+            <Text style={current === "AI Detection" ? styles.tabTextActive : styles.tabText}>AI Detection</Text>
           </TouchableOpacity>
 
           <TouchableOpacity

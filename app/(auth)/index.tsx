@@ -20,7 +20,7 @@ export default function AuthIndex() {
                 style={styles.signInButton}
                 onPress={() => router.push("/signin")}
               >
-                <Text style={styles.signInText}>Sign in</Text>
+                <Text style={styles.signInText}>Log in</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.registerButton}
@@ -34,7 +34,7 @@ export default function AuthIndex() {
 
         {/* Middle content */}
         <View style={styles.content}>
-          <Text style={styles.title}>EcoVenture</Text>
+          <Text style={styles.title}>AgriSafeNav</Text>
           <Text style={styles.subtitle}>
             An autonomous ground vehicle for agricultural applications with
             drawn paths for field navigation.
@@ -47,7 +47,7 @@ export default function AuthIndex() {
 
 const styles = StyleSheet.create({
   headerOverlay: {
-    backgroundColor: "rgba(255,255,255,0.9)",
+    backgroundColor: "#1A1A1A",
     paddingTop: 10,
     paddingBottom: 10,
     paddingHorizontal: 20,
@@ -68,9 +68,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     borderRadius: 6,
   },
-  signInText: { color: "#fff", fontSize: 14, fontWeight: "500" },
+  signInText: { color: "#000000", fontSize: 14, fontWeight: "500" },
   registerButton: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#000000ff",
     paddingVertical: 6,
     paddingHorizontal: 14,
     borderRadius: 6,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     marginTop: 150,
     marginHorizontal: 40,
     zIndex: 3,
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    backgroundColor: "rgba(0, 0, 0, 0.95)",
     borderRadius: 12,
     padding: 20,
     marginBottom: 20,

@@ -33,7 +33,7 @@ export default function SignIn() {
     <BackgroundWrapper>
       <SafeAreaView style={{ flex: 1 }}>
         {/* Top Header */}
-        <AuthHeader title="Sign In" />
+        <AuthHeader title="Log in" />
 
         {/* Form */}
         <View style={styles.form}>
@@ -56,7 +56,7 @@ export default function SignIn() {
 
           <TouchableOpacity style={styles.button} onPress={handleSignIn} disabled={loading}>
             <Text style={styles.buttonText}>
-              {loading ? "Signing in..." : "Sign In"}
+              {loading ? "Logging in..." : "Log In"}
             </Text>
           </TouchableOpacity>
 
