@@ -21,11 +21,15 @@ export default function SignIn() {
     }
 
     setLoading(true);
-    const user = await signInUser(email, password);
-    setLoading(false);
-
-    if (user) {
-      router.replace("/(tabs)/home");
+    try {
+      const user = await signInUser(email, password);
+      if (user) {
+        router.replace("/(tabs)/home");
+      }
+    } catch (error) {
+      console.error("Sign in error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
