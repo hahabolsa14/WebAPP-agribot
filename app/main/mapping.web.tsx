@@ -1,7 +1,5 @@
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
-import { Platform, StyleSheet, View, Text, TextInput, TouchableOpacity, ViewStyle, TextStyle } from "react-native";
+import { Platform, StyleSheet, View, Text, TouchableOpacity, ViewStyle, TextStyle } from "react-native";
 import { useAuth } from "../../utils/authHelpers";
 import { saveMapMarkers, getMapMarkers } from "../../utils/mapHelpers.web";
 
@@ -27,11 +25,8 @@ export default function MappingPage() {
     );
   }
 
-  const router = useRouter();
   const { user } = useAuth();
   const [markers, setMarkers] = useState<Marker[]>([]);
-  const [inputLat, setInputLat] = useState('');
-  const [inputLng, setInputLng] = useState('');
   const mapRef = useRef<HTMLDivElement>(null);
   const leafletMap = useRef<any>(null);
   const markersLayer = useRef<any>(null);
@@ -90,94 +85,35 @@ export default function MappingPage() {
     };
   }, []);
 
-  const handleCoordinateSubmit = () => {
-    const lat = parseFloat(inputLat);
-    const lng = parseFloat(inputLng);
-    if (!isNaN(lat) && !isNaN(lng)) {
-      if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
-        handleMapPress(lat, lng);
-        setInputLat('');
-        setInputLng('');
-      } else {
-        if (typeof window !== 'undefined') window.alert('Latitude must be between -90 and 90, and longitude between -180 and 180');
-      }
-    } else {
-      if (typeof window !== 'undefined') window.alert('Please enter valid numbers for latitude and longitude');
-    }
-  };
-
   const loadMarkersFromFirebase = async () => {
-    if (!user?.uid) return;
-    const loadedMarkers = await getMapMarkers(user.uid);
-    if (loadedMarkers) {  // Remove length check to handle empty arrays too
-      setMarkers(loadedMarkers);
-    }
-  };
-
-  const saveMarkersToFirebase = async () => {
-    if (markers.length === 0) {
-      if (typeof window !== 'undefined') window.alert('No markers to save');
-      return;
-    }
-
     if (!user?.uid) {
-      if (typeof window !== 'undefined') window.alert('You must be logged in to save markers');
+      if (typeof window !== 'undefined') window.alert('You must be logged in to view markers');
       return;
     }
-    
-    const success = await saveMapMarkers(user.uid, markers);
-    if (success) {
-      if (typeof window !== 'undefined') window.alert(`Successfully saved ${markers.length} marker(s)`);
-    } else {
-      if (typeof window !== 'undefined') window.alert('Failed to save markers');
+    const loadedMarkers = await getMapMarkers(user.uid);
+    if (loadedMarkers) {
+      setMarkers(loadedMarkers);
+      if (typeof window !== 'undefined') {
+        window.alert(`Loaded ${loadedMarkers.length} marker(s)`);
+      }
     }
   };
 
   const removeAllMarkers = () => {
-    if (typeof window !== 'undefined' && window.confirm('Are you sure you want to remove all markers?')) {
+    if (typeof window !== 'undefined' && window.confirm('Are you sure you want to clear the displayed markers?')) {
       // Clear the markers map
       markersMap.current.forEach((existingMarker) => {
         markersLayer.current.removeLayer(existingMarker);
       });
       markersMap.current.clear();
-      
       setMarkers([]);
-      if (user?.uid) {
-        saveMapMarkers(user.uid, []);
-      }
     }
   };
 
-  const handleMapPress = (lat: number, lng: number) => {
-    console.log('Map clicked at:', lat, lng);
-    console.log('Current markers:', markers);
-    
-    const newMarker = {
-      lat,
-      lng,
-      title: `Obstacle ${markers.length + 1}`
-    };
-    console.log('Creating new marker:', newMarker);
-    
-    const updatedMarkers = [...markers, newMarker];
-    console.log('Updated markers array:', updatedMarkers);
-    setMarkers(updatedMarkers);
-  };
-
-  // Set up click handler that updates when markers change
+  // Initialize map without click handlers
   useEffect(() => {
     if (!leafletMap.current) return;
-    
-    console.log('Setting up click handler with current markers:', markers);
-    
-    // Remove existing click handlers
-    leafletMap.current.off('click');
-    
-    // Add new click handler with current state
-    leafletMap.current.on('click', (e: any) => {
-      console.log('Map click event triggered with current state');
-      handleMapPress(e.latlng.lat, e.latlng.lng);
-    });
+    // No click handlers needed as we're only displaying markers
   }, [markers]);
 
   const updateMarkersOnMap = () => {
@@ -245,42 +181,15 @@ export default function MappingPage() {
   return (
     <View style={styles.content}>
       <View style={styles.inputContainer}>
-            <View style={styles.coordinateInputs}>
-              <View style={styles.inputWrapper}>
-                <Text style={styles.label}>Latitude:</Text>
-                <TextInput
-                  style={styles.input}
-                  value={inputLat}
-                  onChangeText={setInputLat}
-                  placeholder="Enter latitude"
-                  placeholderTextColor="#808080"
-                  inputMode="numeric"
-                />
-              </View>
-              <View style={styles.inputWrapper}>
-                <Text style={styles.label}>Longitude:</Text>
-                <TextInput
-                  style={styles.input}
-                  value={inputLng}
-                  onChangeText={setInputLng}
-                  placeholder="Enter longitude"
-                  placeholderTextColor="#808080"
-                  inputMode="numeric"
-                />
-              </View>
-            </View>
-            <View style={styles.buttonRow}>
-              <TouchableOpacity style={styles.addButton} onPress={handleCoordinateSubmit}>
-                <Text style={styles.buttonText}>Add Marker</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.saveButton} onPress={saveMarkersToFirebase}>
-                <Text style={styles.buttonText}>Save All</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.removeButton} onPress={removeAllMarkers}>
-                <Text style={styles.buttonText}>Remove All</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={styles.loadButton} onPress={loadMarkersFromFirebase}>
+            <Text style={styles.buttonText}>Show Latest Markers</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.removeButton} onPress={removeAllMarkers}>
+            <Text style={styles.buttonText}>Clear Markers</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
       <View style={styles.mapContainer}>
         <div ref={mapRef} style={{ width: '100%', height: '100%' }} />
       </View>
@@ -308,47 +217,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#333333',
   } as ViewStyle,
-  removeButton: {
-    backgroundColor: '#f44336',
-    padding: 8,
-    borderRadius: 8,
-    flex: 1,
-    alignItems: 'center',
-  } as ViewStyle,
-  coordinateInputs: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 8,
-  } as ViewStyle,
-  inputWrapper: {
-    flex: 1,
-    marginHorizontal: 5,
-  } as ViewStyle,
-  label: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    marginBottom: 4,
-  } as TextStyle,
-  input: {
-    borderWidth: 1,
-    borderColor: '#404040',
-    borderRadius: 8,
-    padding: 8,
-    marginTop: 4,
-    color: '#FFFFFF',
-    fontSize: 14,
-    height: 38,
-    backgroundColor: '#2C2C2C',
-  } as TextStyle,
-  addButton: {
+  loadButton: {
     backgroundColor: '#2196F3',
     padding: 8,
     borderRadius: 8,
     flex: 1,
     alignItems: 'center',
   } as ViewStyle,
-  saveButton: {
-    backgroundColor: '#2e7d32',
+  removeButton: {
+    backgroundColor: '#f44336',
     padding: 8,
     borderRadius: 8,
     flex: 1,

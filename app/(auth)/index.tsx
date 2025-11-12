@@ -68,14 +68,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     borderRadius: 6,
   },
-  signInText: { color: "#000000", fontSize: 14, fontWeight: "500" },
+  signInText: { color: "#ffffffff", fontSize: 14, fontWeight: "500" },
   registerButton: {
     backgroundColor: "#000000ff",
     paddingVertical: 6,
     paddingHorizontal: 14,
     borderRadius: 6,
   },
-  registerText: { color: "#000", fontSize: 14, fontWeight: "500" },
+  registerText: { color: "#ffffffff", fontSize: 14, fontWeight: "500" },
   content: {
     marginTop: 150,
     marginHorizontal: 40,
@@ -92,6 +92,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(46, 125, 50, 0.1)",
   },
-  title: { fontSize: 28, fontWeight: "bold", marginBottom: 30, color: "#000" },
-  subtitle: { fontSize: 14, color: "#222", lineHeight: 20, textAlign: "left" },
+  title: { fontSize: 28, fontWeight: "bold", marginBottom: 30, color: "#ffffffff" },
+  subtitle: { fontSize: 14, color: "#ffffffff", lineHeight: 20, textAlign: "left" },
 });

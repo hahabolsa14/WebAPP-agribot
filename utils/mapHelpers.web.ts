@@ -10,13 +10,27 @@ export interface MapMarker {
 
 export const saveMapMarkers = async (userId: string, markers: MapMarker[]) => {
   try {
-    await setDoc(doc(db, 'mapMarkers', userId), {
+    console.log('Saving markers for user:', userId);
+    console.log('Markers to save:', markers);
+    
+    const docRef = doc(db, 'mapMarkers', userId);
+    const data = {
       markers,
       updatedAt: serverTimestamp(),
-    });
+    };
+    
+    console.log('Attempting to save data:', data);
+    await setDoc(docRef, data);
+    console.log('Data saved successfully');
+    
     return true;
   } catch (error) {
     console.error('Error saving markers:', error);
+    console.error('Error details:', {
+      userId,
+      markersCount: markers?.length,
+      error: error instanceof Error ? error.message : String(error)
+    });
     return false;
   }
 };
