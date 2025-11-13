@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
-import { Platform, StyleSheet, Text, View, ViewStyle, TextStyle } from "react-native";
+import { StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 
 declare global {
   interface Window {

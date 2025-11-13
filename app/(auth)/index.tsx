@@ -14,7 +14,7 @@ export default function AuthIndex() {
         {/* Top white header bar */}
         <View style={styles.headerOverlay}>
           <View style={styles.topBar}>
-            <Ionicons name="car-sport-outline" size={28} color="black" />
+            <Ionicons name="leaf-outline" size={28} color="#2e7d32" />
             <View style={styles.authButtons}>
               <TouchableOpacity
                 style={styles.signInButton}
@@ -34,7 +34,7 @@ export default function AuthIndex() {
 
         {/* Middle content */}
         <View style={styles.content}>
-          <Text style={styles.title}>AgriSafeNav</Text>
+          <Text style={styles.title}>Welcome to AgriSafeNav</Text>
           <Text style={styles.subtitle}>
             An autonomous ground vehicle for agricultural applications with
             drawn paths for field navigation.
@@ -63,19 +63,27 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   signInButton: {
-    backgroundColor: "#333",
+    backgroundColor: "#4CAF50",    // bright green for contrast
     paddingVertical: 6,
     paddingHorizontal: 14,
     borderRadius: 6,
   },
-  signInText: { color: "#ffffffff", fontSize: 14, fontWeight: "500" },
+  signInText: { 
+    color: "#000",                 // black text on green button
+    fontSize: 14, 
+    fontWeight: "500" 
+  },
   registerButton: {
-    backgroundColor: "#000000ff",
+    backgroundColor: "#fff",       // white button
     paddingVertical: 6,
     paddingHorizontal: 14,
     borderRadius: 6,
   },
-  registerText: { color: "#ffffffff", fontSize: 14, fontWeight: "500" },
+  registerText: { 
+    color: "#000",             // dark green text to match theme
+    fontSize: 14, 
+    fontWeight: "500" 
+  },
   content: {
     marginTop: 150,
     marginHorizontal: 40,
@@ -92,6 +100,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(46, 125, 50, 0.1)",
   },
-  title: { fontSize: 28, fontWeight: "bold", marginBottom: 30, color: "#ffffffff" },
+  title: { fontSize: 28, fontWeight: "bold", marginBottom: 30, color: "#2e7d32" },
   subtitle: { fontSize: 14, color: "#ffffffff", lineHeight: 20, textAlign: "left" },
 });

@@ -4,7 +4,7 @@ import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } fr
 import { SafeAreaView } from "react-native-safe-area-context";
 import AuthHeader from "../../components/AuthHeader";
 import AuthInput from "../../components/AuthInput";
-import { signInUser } from "../../utils/authHelpers";
+import { resetPassword, signInUser } from "../../utils/authHelpers";
 import BackgroundWrapper from "../BackgroundWrapper";
 
 export default function SignIn() {
@@ -68,7 +68,16 @@ export default function SignIn() {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => Alert.alert("Forgot Password", "Coming soon...")}>
+          <TouchableOpacity
+            onPress={async () => {
+              if (!email) {
+                Alert.alert("Error", "Please enter your email first.");
+                return;
+              }
+
+              await resetPassword(email);
+            }}
+          >
             <Text style={styles.forgotText}>Forgot password?</Text>
           </TouchableOpacity>
         </View>

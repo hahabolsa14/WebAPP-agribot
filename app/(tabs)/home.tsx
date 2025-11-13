@@ -1,14 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, Platform } from "react-native";
+import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackgroundWrapper from "../BackgroundWrapper";
 
 // Import the standalone pages - we'll embed them in the dashboard
+import AIDetectionPage from "../main/aiDetection";
 import BotLocationPage from "../main/botLocation";
 import PathHistoryPage from "../main/pathHistory";
-import AIDetectionPage from "../main/aiDetection";
 // Note: Use mapping.web.tsx for web platform
 const MappingPage = Platform.OS === 'web' 
   ? require("../main/mapping.web").default 
@@ -32,7 +32,7 @@ export default function HomeScreen() {
 
   const handleLogout = () => {
     setShowProfileMenu(false);
-    router.push('/(auth)/signin');
+    router.push('/(auth)');
   };
 
   const handleNavigateToHome = () => {
