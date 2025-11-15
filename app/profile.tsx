@@ -16,6 +16,7 @@ import { signOut, updateProfile } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import BackgroundWrapper from "./BackgroundWrapper";
 import { useAuth } from "../utils/authHelpers";
+import NetworkStatusBanner from "../components/NetworkStatusBanner";
 
 interface UserProfile {
   displayName: string;
@@ -151,6 +152,7 @@ export default function ProfileScreen() {
   return (
     <BackgroundWrapper>
       <SafeAreaView style={styles.container}>
+        <NetworkStatusBanner />
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={styles.title}>My Profile</Text>
           

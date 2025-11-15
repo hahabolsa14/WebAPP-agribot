@@ -15,6 +15,7 @@ import { auth } from "../firebase";
 import { sendPasswordResetEmail, deleteUser } from "firebase/auth";
 import BackgroundWrapper from "./BackgroundWrapper";
 import { useAuth } from "../utils/authHelpers";
+import NetworkStatusBanner from "../components/NetworkStatusBanner";
 
 export default function SettingsScreen() {
   const { user } = useAuth();
@@ -113,6 +114,7 @@ export default function SettingsScreen() {
   return (
     <BackgroundWrapper>
       <SafeAreaView style={styles.container}>
+        <NetworkStatusBanner />
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={styles.title}>Settings</Text>
 
