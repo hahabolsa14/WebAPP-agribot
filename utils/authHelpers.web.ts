@@ -2,6 +2,7 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
   signOut as firebaseSignOut,
+  sendPasswordResetEmail,
   User,
   onAuthStateChanged
 } from 'firebase/auth';
@@ -93,5 +94,33 @@ export const signOut = async () => {
     await firebaseSignOut(auth);
   } catch (error) {
     throw error;
+  }
+};
+
+// Password reset helper
+export const resetPassword = async (email: string) => {
+  if (!email) {
+    window.alert("Error: Please enter your email address.");
+    return false;
+  }
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    window.alert("Success: Password reset email sent! Check your inbox.");
+    return true;
+  } catch (error: any) {
+    console.log("Password reset error:", error);
+    
+    switch (error.code) {
+      case "auth/invalid-email":
+        window.alert("Error: Invalid email format.");
+        break;
+      case "auth/user-not-found":
+        window.alert("Error: No account exists with this email.");
+        break;
+      default:
+        window.alert("Error: " + (error.message || "Failed to send reset email. Please try again."));
+    }
+    return false;
   }
 };

@@ -4,7 +4,7 @@ import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } fr
 import { SafeAreaView } from "react-native-safe-area-context";
 import AuthHeader from "../../components/AuthHeader";
 import AuthInput from "../../components/AuthInput";
-import { resetPassword, signInUser } from "../../utils/authHelpers";
+import {resetPassword, signInUser } from "../../utils/authHelpers";
 import BackgroundWrapper from "../BackgroundWrapper";
 
 export default function SignIn() {

@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import { useEffect, useState } from 'react';
 import { Alert } from "react-native";
 import { auth } from "../firebase";
@@ -98,5 +98,33 @@ const handleFirebaseError = (error: any, type: "sign-in" | "sign-up") => {
           error.message || "An unexpected error occurred. Please try again later."
         );
     }
+  }
+};
+
+// Password reset helper
+export const resetPassword = async (email: string) => {
+  if (!email) {
+    Alert.alert("Error", "Please enter your email address.");
+    return false;
+  }
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    Alert.alert("Success", "Password reset email sent! Check your inbox.");
+    return true;
+  } catch (error: any) {
+    console.log("Password reset error:", error);
+    
+    switch (error.code) {
+      case "auth/invalid-email":
+        Alert.alert("Error", "Invalid email format.");
+        break;
+      case "auth/user-not-found":
+        Alert.alert("Error", "No account exists with this email.");
+        break;
+      default:
+        Alert.alert("Error", error.message || "Failed to send reset email. Please try again.");
+    }
+    return false;
   }
 };
