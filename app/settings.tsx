@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 import { auth } from "../firebase";
 import { sendPasswordResetEmail, deleteUser } from "firebase/auth";
 import BackgroundWrapper from "./BackgroundWrapper";
@@ -22,7 +23,6 @@ export default function SettingsScreen() {
   const router = useRouter();
   const [notifications, setNotifications] = useState(true);
   const [emailUpdates, setEmailUpdates] = useState(false);
-  const [autoSave, setAutoSave] = useState(true);
 
   const handleChangePassword = async () => {
     if (!user?.email) return;
@@ -115,130 +115,151 @@ export default function SettingsScreen() {
     <BackgroundWrapper>
       <SafeAreaView style={styles.container}>
         <NetworkStatusBanner />
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Text style={styles.title}>Settings</Text>
-
-          {/* Account Section */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Account</Text>
+        
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.headerLeft}>
+            <Ionicons name="leaf-outline" size={32} color="#2e7d32" />
+            <Text style={styles.headerTitle}>AgriSafeNav</Text>
             
-            <TouchableOpacity 
-              style={styles.settingItem}
-              onPress={() => router.push("/profile")}
-            >
-              <Text style={styles.settingText}>Edit Profile</Text>
-              <Text style={styles.arrow}>›</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              style={styles.settingItem}
-              onPress={handleChangePassword}
-            >
-              <Text style={styles.settingText}>Change Password</Text>
-              <Text style={styles.arrow}>›</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Preferences Section */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Preferences</Text>
-            
-            <View style={styles.settingItem}>
-              <Text style={styles.settingText}>Push Notifications</Text>
-              <Switch
-                value={notifications}
-                onValueChange={setNotifications}
-                trackColor={{ false: "#767577", true: "#10b981" }}
-                thumbColor={notifications ? "#fff" : "#f4f3f4"}
-              />
-            </View>
-
-            <View style={styles.settingItem}>
-              <Text style={styles.settingText}>Email Updates</Text>
-              <Switch
-                value={emailUpdates}
-                onValueChange={setEmailUpdates}
-                trackColor={{ false: "#767577", true: "#10b981" }}
-                thumbColor={emailUpdates ? "#fff" : "#f4f3f4"}
-              />
-            </View>
-
-            <View style={styles.settingItem}>
-              <Text style={styles.settingText}>Auto-save Chats</Text>
-              <Switch
-                value={autoSave}
-                onValueChange={setAutoSave}
-                trackColor={{ false: "#767577", true: "#10b981" }}
-                thumbColor={autoSave ? "#fff" : "#f4f3f4"}
-              />
+            <View style={styles.headerNav}>
+              <TouchableOpacity onPress={() => router.push('/home')} style={styles.navLink}>
+                <Text style={styles.navLinkText}>Home</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => router.push('/about')} style={styles.navLink}>
+                <Text style={styles.navLinkText}>About</Text>
+              </TouchableOpacity>
             </View>
           </View>
-
-          {/* Data & Storage Section */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Data & Storage</Text>
-            
-            <TouchableOpacity 
-              style={styles.settingItem}
-              onPress={handleClearCache}
-            >
-              <Text style={styles.settingText}>Clear Cache</Text>
-              <Text style={styles.arrow}>›</Text>
+          <View style={styles.headerRight}>
+            <TouchableOpacity style={styles.headerIcon}>
+              <Ionicons name="notifications-outline" size={24} color="#B0B0B0" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.headerIcon} onPress={() => router.push('/settings')}>
+              <Ionicons name="settings" size={24} color="#4CAF50" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.avatar} onPress={() => router.push('/profile')}>
+              <Ionicons name="person-outline" size={24} color="#4CAF50" />
             </TouchableOpacity>
           </View>
+        </View>
 
-          {/* Support Section */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Support</Text>
-            
-            <TouchableOpacity 
-              style={styles.settingItem}
-              onPress={handleContactSupport}
-            >
-              <Text style={styles.settingText}>Contact Support</Text>
-              <Text style={styles.arrow}>›</Text>
-            </TouchableOpacity>
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
+            <Text style={styles.title}>Settings</Text>
 
-            <TouchableOpacity 
-              style={styles.settingItem}
-              onPress={handlePrivacyPolicy}
-            >
-              <Text style={styles.settingText}>Privacy Policy</Text>
-              <Text style={styles.arrow}>›</Text>
-            </TouchableOpacity>
+            {/* Account Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Account</Text>
+              
+              <TouchableOpacity 
+                style={styles.settingItem}
+                onPress={() => router.push("/profile")}
+              >
+                <Text style={styles.settingText}>Edit Profile</Text>
+                <Text style={styles.arrow}>›</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity 
-              style={styles.settingItem}
-              onPress={handleTermsOfService}
-            >
-              <Text style={styles.settingText}>Terms of Service</Text>
-              <Text style={styles.arrow}>›</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* About Section */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>About</Text>
-            <View style={styles.settingItem}>
-              <Text style={styles.settingText}>Version</Text>
-              <Text style={styles.versionText}>1.0.0</Text>
+              <TouchableOpacity 
+                style={styles.settingItem}
+                onPress={handleChangePassword}
+              >
+                <Text style={styles.settingText}>Change Password</Text>
+                <Text style={styles.arrow}>›</Text>
+              </TouchableOpacity>
             </View>
-          </View>
 
-          {/* Danger Zone */}
-          <View style={styles.section}>
-            <Text style={[styles.sectionTitle, styles.dangerTitle]}>Danger Zone</Text>
-            
-            <TouchableOpacity 
-              style={[styles.settingItem, styles.dangerItem]}
-              onPress={handleDeleteAccount}
-            >
-              <Text style={styles.dangerText}>Delete Account</Text>
-              <Text style={styles.arrow}>›</Text>
-            </TouchableOpacity>
-          </View>
+            {/* Preferences Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Preferences</Text>
+              
+              <View style={styles.settingItem}>
+                <Text style={styles.settingText}>Push Notifications</Text>
+                <Switch
+                  value={notifications}
+                  onValueChange={setNotifications}
+                  trackColor={{ false: "#404040", true: "#4CAF50" }}
+                  thumbColor={notifications ? "#fff" : "#999"}
+                />
+              </View>
 
-          <View style={{ height: 40 }} />
+              <View style={styles.settingItem}>
+                <Text style={styles.settingText}>Email Updates</Text>
+                <Switch
+                  value={emailUpdates}
+                  onValueChange={setEmailUpdates}
+                  trackColor={{ false: "#404040", true: "#4CAF50" }}
+                  thumbColor={emailUpdates ? "#fff" : "#999"}
+                />
+              </View>
+            </View>
+
+            {/* Data & Storage Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Data & Storage</Text>
+              
+              <TouchableOpacity 
+                style={styles.settingItem}
+                onPress={handleClearCache}
+              >
+                <Text style={styles.settingText}>Clear Cache</Text>
+                <Text style={styles.arrow}>›</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Support Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Support</Text>
+              
+              <TouchableOpacity 
+                style={styles.settingItem}
+                onPress={handleContactSupport}
+              >
+                <Text style={styles.settingText}>Contact Support</Text>
+                <Text style={styles.arrow}>›</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity 
+                style={styles.settingItem}
+                onPress={handlePrivacyPolicy}
+              >
+                <Text style={styles.settingText}>Privacy Policy</Text>
+                <Text style={styles.arrow}>›</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity 
+                style={styles.settingItem}
+                onPress={handleTermsOfService}
+              >
+                <Text style={styles.settingText}>Terms of Service</Text>
+                <Text style={styles.arrow}>›</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* About Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>About</Text>
+              <View style={styles.settingItem}>
+                <Text style={styles.settingText}>Version</Text>
+                <Text style={styles.versionText}>1.0.0</Text>
+              </View>
+            </View>
+
+            {/* Danger Zone */}
+            <View style={styles.section}>
+              <Text style={[styles.sectionTitle, styles.dangerTitle]}>Danger Zone</Text>
+              
+              <TouchableOpacity 
+                style={[styles.settingItem, styles.dangerItem]}
+                onPress={handleDeleteAccount}
+              >
+                <Text style={styles.dangerText}>Delete Account</Text>
+                <Text style={styles.arrow}>›</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{ height: 40 }} />
+          </View>
         </ScrollView>
       </SafeAreaView>
     </BackgroundWrapper>
@@ -248,27 +269,90 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    backgroundColor: "#121212",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#1A1A1A",
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#333333",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  headerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  headerNav: {
+    flexDirection: "row",
+    gap: 24,
+    marginLeft: 32,
+  },
+  navLink: {
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+  },
+  navLinkText: {
+    fontSize: 16,
+    color: "#B0B0B0",
+    fontWeight: "500",
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#4CAF50",
+  },
+  headerRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+  },
+  headerIcon: {
+    padding: 8,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#2C2C2C",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 8,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: 24,
+    maxWidth: 800,
+    alignSelf: "center",
+    width: "100%",
   },
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: "bold",
-    marginBottom: 30,
-    color: "#122909",
-    textAlign: "center",
+    marginBottom: 32,
+    color: "#FFFFFF",
   },
   section: {
-    marginBottom: 30,
+    marginBottom: 32,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "600",
-    color: "#122909",
-    marginBottom: 12,
-    marginLeft: 4,
+    color: "#4CAF50",
+    marginBottom: 16,
   },
   settingItem: {
-    backgroundColor: "#fff",
+    backgroundColor: "#1E1E1E",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -276,25 +360,26 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: "#e0e0e0",
+    borderColor: "#333",
   },
   settingText: {
     fontSize: 16,
-    color: "#000",
+    color: "#FFFFFF",
   },
   arrow: {
     fontSize: 24,
-    color: "#999",
+    color: "#B0B0B0",
   },
   versionText: {
     fontSize: 16,
-    color: "#666",
+    color: "#B0B0B0",
   },
   dangerTitle: {
     color: "#ef4444",
   },
   dangerItem: {
     borderColor: "#ef4444",
+    backgroundColor: "#2C1616",
   },
   dangerText: {
     fontSize: 16,

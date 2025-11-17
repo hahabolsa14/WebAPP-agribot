@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 import { auth, db } from "../firebase";
 import { signOut, updateProfile } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
@@ -153,16 +154,46 @@ export default function ProfileScreen() {
     <BackgroundWrapper>
       <SafeAreaView style={styles.container}>
         <NetworkStatusBanner />
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Text style={styles.title}>My Profile</Text>
-          
-          {/* Email (Read-only) */}
-          <View style={styles.section}>
-            <Text style={styles.label}>Email</Text>
-            <View style={styles.readOnlyContainer}>
-              <Text style={styles.readOnlyText}>{user?.email}</Text>
+        
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.headerLeft}>
+            <Ionicons name="leaf-outline" size={32} color="#2e7d32" />
+            <Text style={styles.headerTitle}>AgriSafeNav</Text>
+            
+            <View style={styles.headerNav}>
+              <TouchableOpacity onPress={() => router.push('/home')} style={styles.navLink}>
+                <Text style={styles.navLinkText}>Home</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => router.push('/about')} style={styles.navLink}>
+                <Text style={styles.navLinkText}>About</Text>
+              </TouchableOpacity>
             </View>
           </View>
+          <View style={styles.headerRight}>
+            <TouchableOpacity style={styles.headerIcon}>
+              <Ionicons name="notifications-outline" size={24} color="#B0B0B0" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.headerIcon} onPress={() => router.push('/settings')}>
+              <Ionicons name="settings-outline" size={24} color="#B0B0B0" />
+            </TouchableOpacity>
+            <View style={styles.avatar}>
+              <Ionicons name="person" size={24} color="#4CAF50" />
+            </View>
+          </View>
+        </View>
+
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
+            <Text style={styles.title}>My Profile</Text>
+          
+            {/* Email (Read-only) */}
+            <View style={styles.section}>
+              <Text style={styles.label}>Email</Text>
+              <View style={styles.readOnlyContainer}>
+                <Text style={styles.readOnlyText}>{user?.email}</Text>
+              </View>
+            </View>
 
           {/* Display Name */}
           <View style={styles.section}>
@@ -261,7 +292,8 @@ export default function ProfileScreen() {
             <Text style={styles.signOutButtonText}>Sign Out</Text>
           </TouchableOpacity>
 
-          <View style={{ height: 40 }} />
+            <View style={{ height: 40 }} />
+          </View>
         </ScrollView>
       </SafeAreaView>
     </BackgroundWrapper>
@@ -271,64 +303,129 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    backgroundColor: "#121212",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#1A1A1A",
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#333333",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  headerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  headerNav: {
+    flexDirection: "row",
+    gap: 24,
+    marginLeft: 32,
+  },
+  navLink: {
+    paddingVertical: 8,
+    paddingHorizontal: 4,
+  },
+  navLinkText: {
+    fontSize: 16,
+    color: "#B0B0B0",
+    fontWeight: "500",
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#4CAF50",
+  },
+  headerRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+  },
+  headerIcon: {
+    padding: 8,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#2C2C2C",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 8,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: 24,
+    maxWidth: 800,
+    alignSelf: "center",
+    width: "100%",
   },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#121212",
   },
   loadingText: {
     marginTop: 10,
     fontSize: 16,
-    color: "#10b981",
+    color: "#4CAF50",
   },
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: "bold",
-    marginBottom: 30,
-    color: "#122909",
-    textAlign: "center",
+    marginBottom: 32,
+    color: "#FFFFFF",
   },
   section: {
-    marginBottom: 20,
+    marginBottom: 24,
   },
   label: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#122909",
+    color: "#B0B0B0",
     marginBottom: 8,
   },
   readOnlyContainer: {
-    backgroundColor: "#f5f5f5",
-    padding: 12,
+    backgroundColor: "#2C2C2C",
+    padding: 14,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#e0e0e0",
+    borderColor: "#404040",
   },
   readOnlyText: {
     fontSize: 16,
-    color: "#666",
+    color: "#FFFFFF",
   },
   input: {
-    backgroundColor: "#fff",
+    backgroundColor: "#2C2C2C",
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#404040",
     borderRadius: 8,
-    padding: 12,
+    padding: 14,
     fontSize: 16,
-    color: "#000",
+    color: "#FFFFFF",
   },
   multilineInput: {
-    height: 80,
+    height: 100,
     textAlignVertical: "top",
   },
   saveButton: {
-    backgroundColor: "#10b981",
+    backgroundColor: "#4CAF50",
     padding: 16,
     borderRadius: 8,
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 16,
     marginBottom: 12,
   },
   saveButtonText: {
