@@ -8,7 +8,7 @@ import BackgroundWrapper from "../BackgroundWrapper";
 // Import the standalone pages - we'll embed them in the dashboard
 import AIDetectionPage from "../main/aiDetection";
 import BotLocationPage from "../main/botLocation";
-import PathHistoryPage from "../main/pathHistory";
+// import PathHistoryPage from "../main/pathHistory";
 // Note: Use mapping.web.tsx for web platform
 const MappingPage = Platform.OS === 'web' 
   ? require("../main/mapping.web").default 
@@ -21,7 +21,7 @@ export default function HomeScreen() {
 
   const tabs = [
     { label: "Bot Location", icon: "location-outline" as const },
-    { label: "Path History", icon: "time-outline" as const },
+    // { label: "Path History", icon: "time-outline" as const },
     { label: "Mapping", icon: "map-outline" as const },
     { label: "AI Detection", icon: "scan-outline" as const },
   ];
@@ -48,8 +48,8 @@ export default function HomeScreen() {
     switch (activeTab) {
       case "Bot Location":
         return <View style={styles.embeddedPage}><BotLocationPage /></View>;
-      case "Path History":
-        return <View style={styles.embeddedPage}><PathHistoryPage /></View>;
+      // case "Path History":
+      //   return <View style={styles.embeddedPage}><PathHistoryPage /></View>;
       case "Mapping":
         return <View style={styles.embeddedPage}><MappingPage /></View>;
       case "AI Detection":
